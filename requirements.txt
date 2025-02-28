@@ -1,3 +1,9 @@
-streamlit
-scikit-learn
 pandas
+streamlit
+streamlit_modal
+streamlit_extras
+scikit-learn
+streamlit-community-navigation-bar
+streamlit-option-menu
+requests
+bs4
