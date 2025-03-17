@@ -10,23 +10,22 @@ st.query_params["pages"] = "홈"
 # ✅ 스크롤 문제 해결 (iPhone Safari 대응)
 st.markdown("""
     <style>
-    /* 전체 HTML 및 Body에 스크롤 허용 */
-    html, body {
-        height: auto !important;
-        overflow-y: scroll !important;
-        -webkit-overflow-scrolling: touch !important;  /* iPhone 스크롤 부드럽게 */
+    /* 전체 화면 높이를 채우고 스크롤 가능하도록 설정 */
+    .st-emotion-cache-bm2z3a {
+        min-height: 100vh !important; /* 전체 화면 높이 유지 */
+        height: -webkit-fill-available !important;
+        overflow: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        display: flex !important;
+        flex-direction: column !important;
+        pointer-events: auto !important; /* 화면 어디든 터치 가능 */
     }
 
-    /* Streamlit 컨테이너 스크롤 허용 */
+    /* Streamlit 메인 컨테이너 스크롤 설정 */
     [data-testid="stAppViewContainer"] {
         height: 100% !important;
-        overflow-y: auto !important; /* 세로 스크롤 활성화 */
-    }
-
-    /* iFrame 크기 및 스크롤 가능하게 설정 */
-    iframe {
-        height: 100% !important;
         overflow-y: auto !important;
+        touch-action: pan-y; /* 화면 어디서든 스크롤 가능 */
     }
 
     /* 사이드바 스크롤 허용 */
@@ -42,21 +41,42 @@ st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css?family=Nanum+Gothic+Coding:400');
 
-/* 모든 요소에 Nanum Gothic Coding 폰트 적용 */
+/* 모든 요소에 Nanum Gothic Coding 폰트 적용 (네비게이션 바 제외) /
 body, .stButton button, .stTextInput input, .stSelectbox, .stMultiselect,
-h1, h2, h3, h4, h5, h6, p, div, span, li, a {
+h1, h2, h3, h4, h5, h6, p, div:not([data-v-96be9aef]), span:not([data-v-96be9aef]), 
+li:not([data-v-96be9aef]), a:not([data-v-96be9aef]) {
+    font-family: 'Nanum Gothic Coding', monospace !important;
+}
+
+/* 이미지 컨테이너 스타일 추가 */
+[data-testid="stImageContainer"] {
+    display: flex !important;
+    justify-content: center !important;
+}
+
+/* 전체 화면 프레임 스타일 */
+[data-testid="stFullScreenFrame"] {
+    display: flex !important;
+    justify-content: center !important;
+    width: 100% !important;
+}
+
+/ 버튼 스타일 */
+button[data-testid="stBaseButton-headerNoPadding"] {
+    background-color: red !important;
     font-family: 'Nanum Gothic Coding', monospace !important;
 }
 </style>
 """, unsafe_allow_html=True)
 
-# 웹페이지에 로고 삽입
-st.image('image/logo.png', use_column_width=True)
+# 웹페이지에 로고 삽입입
+st.logo('image/logo.png', size = 'Large', icon_image = 'image/logo.png')
 
 # 네비게이션 바에 표시할 페이지 이름
-pages = ["Home", "Boots", "Player", "Dashboard"]
+pages = ["Home", "Boots", "Player","Dashboard"]
 
-# 네비게이션 바 스타일 설정
+
+# 네비게이션 바 스타일 설정 (원하는 대로 수정 가능)
 styles = {
     "nav": {
         "background-color": "#d3d3d3",
@@ -80,26 +100,26 @@ styles = {
     },
 }
 
-# 네비게이션 바 옵션 설정
+# 네비게이션 바 옵션 설정 (메뉴와 사이드바를 활성화)
 options = {
     "show_menu": False,
     "show_sidebar": True,
     "use_padding": True,
 }
 
-# 네비게이션 바 생성
+# 네비게이션 바 생성: 선택한 페이지 이름이 반환됩니다.
 page = st_navbar(
     pages,
     styles=styles,
     options=options,
-)
+) # 선택한 페이지 이름을 출력 (디버깅 용도)
 
 # 각 페이지에 해당하는 함수 매핑
 functions = {
     "Home": pg.show_home,
     "Boots": pg.show_Find,
     "Player": pg.show_player,
-    "Dashboard": pg.show_dashboard
+    "Dashboard":pg.show_dashboard
 }
 
 # 선택한 페이지의 함수를 호출하여 해당 페이지 내용 표시
